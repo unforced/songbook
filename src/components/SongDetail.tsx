@@ -1,4 +1,5 @@
 import { NoteRenderer } from "@openparachute/surface-render";
+import remarkBreaks from "remark-breaks";
 import rehypeHighlight from "rehype-highlight";
 import {
   PLAY_ON_LABEL,
@@ -33,6 +34,10 @@ export function SongDetail({ song }: { song: Song }) {
             href: `#/song/${encodeURIComponent(target)}`,
             exists: true,
           })}
+          // Lyric/chant lines are written one per line with single newlines;
+          // remark-breaks keeps them on separate lines instead of collapsing
+          // them into one paragraph (plain Markdown's default).
+          remarkPlugins={[remarkBreaks]}
           rehypePlugins={[rehypeHighlight]}
         />
       </div>

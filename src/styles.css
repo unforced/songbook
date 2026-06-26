@@ -475,6 +475,36 @@ body {
   padding: 0;
 }
 
+.detail__body p {
+  margin: 0 0 1em;
+}
+
+/* Section dividers (`---`) between practice notes and lyric blocks. */
+.detail__body hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 1.6em 0;
+}
+
+/* Numbered verses (e.g. the Hanuman Chalisa chaupais) and chord lists. */
+.detail__body ol,
+.detail__body ul {
+  padding-left: 1.4em;
+}
+
+.detail__body li {
+  margin: 0.25em 0;
+}
+
+/* Parenthetical translations are written as blockquotes/italics. */
+.detail__body blockquote {
+  border-left: 3px solid var(--accent-soft);
+  margin: 1em 0;
+  padding-left: 1em;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 760px) {
   .library {
