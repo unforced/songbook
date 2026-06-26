@@ -80,9 +80,35 @@ src/
   styles.css            songbook styling
 ```
 
-## Deploying
+## Deploying (GitHub Pages)
 
-`npm run build` emits a static `dist/` you can host anywhere (GitHub Pages, any
-static host). Because sign-in uses Dynamic Client Registration bound to the
-app's `…/oauth/callback`, the deployed origin registers itself on first sign-in
-— just make sure the hub allows that origin.
+This repo ships a GitHub Actions workflow (`.github/workflows/deploy.yml`) that
+builds and publishes to GitHub Pages on every push to `main`. The site lives at:
+
+> **https://unforced.github.io/songbook/**
+
+Notes on how it's wired:
+
+- **Base path.** The production build uses `base: "/songbook/"` (see
+  `vite.config.ts`) so assets resolve under the project subpath. Dev stays at
+  `/`.
+- **OAuth redirect.** Sign-in redirects back to the app's own URL (the Vite base
+  path), not a `…/oauth/callback` route — GitHub Pages has no SPA fallback, so a
+  dedicated callback path would 404. The app reads `?code&state` off its base
+  URL. The redirect URI is derived from `import.meta.env.BASE_URL` in
+  `src/surface.ts`, so dev and Pages stay consistent.
+- **Dynamic Client Registration.** The `github.io` origin self-registers with
+  the hub on first sign-in — no secret to configure.
+
+### One-time setup
+
+The workflow enables Pages automatically (`actions/configure-pages` with
+`enablement: true`). If the first run can't enable it, turn it on manually:
+**repo → Settings → Pages → Build and deployment → Source: GitHub Actions**, then
+re-run the workflow.
+
+### Hub must allow the origin
+
+Sign-in only works if the Parachute hub trusts the `https://unforced.github.io`
+origin (CORS) and accepts the dynamically registered redirect URI. The local dev
+origin (`http://localhost:5173`) and the Pages origin are separate registrations.

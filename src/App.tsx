@@ -27,8 +27,9 @@ export function App() {
         const q = new URLSearchParams(window.location.search);
         if (q.get("code") && q.get("state")) {
           await surface.handleCallback();
-          // handleCallback strips the query params; ensure we're back at root.
-          window.history.replaceState({}, "", "/");
+          // handleCallback strips the query params; ensure we're back at the
+          // app's base path (matters under a GitHub Pages subpath, not just "/").
+          window.history.replaceState({}, "", import.meta.env.BASE_URL);
         }
 
         const client = surface.getClient();
