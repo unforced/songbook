@@ -40,7 +40,14 @@ export function App() {
         clientRef.current = client;
 
         if (!cancelled) setPhase({ kind: "loading" });
-        const notes = await client.queryNotes({ tag: "song", limit: 200 });
+        // includeContent defaults to false server-side, so a plain list query
+        // returns metadata but no note body — the lyrics/chords. Request it so
+        // the detail view has something to render.
+        const notes = await client.queryNotes({
+          tag: "song",
+          limit: 200,
+          includeContent: true,
+        });
         if (cancelled) return;
 
         const songs = notes.map(toSong).sort((a, b) => a.title.localeCompare(b.title));
